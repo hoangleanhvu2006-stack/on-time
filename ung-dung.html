@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On Time ứng dụng nhận ca lẻ</title>
+<meta name="description" content="Bản mô phỏng ứng dụng On Time: sinh viên nhận ca làm lẻ 3 đến 5 tiếng ở quán quanh trường, quán nạp tiền trước, tiền công về trong 24 giờ. Đề án môn học, dữ liệu mẫu.">
+<meta property="og:title" content="On Time: nhận ca lẻ gần trường">
+<meta property="og:description" content="Bản mô phỏng ứng dụng của đề án On Time. Dữ liệu mẫu, không có giao dịch thật.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2310203A'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23FFE14D' stroke-width='2.5'/%3E%3Cpath d='M16 10v6l4 3' stroke='%23FFE14D' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Bố cục: căn trái, một điểm nhấn duy nhất là chiếc điện thoại chạy bản mô phỏng; phần còn lại là bảng và danh sách yên lặng */
+  --giay:#F4F7FB; --trang:#FFFFFF; --muc:#10203A; --chi:#56677F; --ke:#D3DBE8;
+  --da-quang:#FFE14D; --dung-gio:#0B8A6A; --canh-bao:#C8371F;
+  --chu:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--giay);color:var(--muc);font-family:var(--chu);font-size:17px;line-height:1.6}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--dung-gio);outline-offset:2px;border-radius:4px}
+.khung{max-width:1080px;margin:0 auto;padding:0 20px}
+.bao{background:var(--muc);color:#fff;font-size:14px;padding:8px 0}
+.bao b{color:var(--da-quang)}
+header.dau{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:18px 0}
+.ten{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;text-decoration:none}
+.ten i{width:30px;height:30px;border-radius:8px;background:var(--muc);display:grid;place-items:center}
+.ten i::before{content:"";width:16px;height:16px;border:2.5px solid var(--da-quang);border-radius:50%;background:linear-gradient(var(--da-quang),var(--da-quang)) 50% 30%/2.5px 6px no-repeat}
+nav.muc{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:16px}
+nav.muc a{text-decoration:none;color:var(--chi)}
+nav.muc a:hover{color:var(--muc);text-decoration:underline}
+nav.muc a[aria-current]{color:var(--muc);font-weight:700;box-shadow:inset 0 -3px 0 var(--da-quang)}
+.mo>*,.hai>*{min-width:0}
+.mo{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:start;padding:28px 0 56px}
+h1{font-size:clamp(34px,5.2vw,56px);line-height:1.08;font-weight:800;margin:10px 0 18px;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(24px,3vw,32px);line-height:1.2;font-weight:800;margin:0 0 14px;text-wrap:balance}
+h3{font-size:18px;margin:0 0 6px}
+p{margin:0 0 14px;max-width:62ch}
+.dan{font-size:19px;color:var(--chi)}
+.ba-y{list-style:none;padding:0;margin:22px 0;display:grid;gap:10px}
+.ba-y li{padding-left:30px;position:relative}
+.ba-y li::before{content:"";position:absolute;left:0;top:.42em;width:18px;height:10px;border-left:3px solid var(--dung-gio);border-bottom:3px solid var(--dung-gio);transform:rotate(-45deg) scale(.8)}
+.nut{display:inline-block;border:0;border-radius:10px;padding:13px 20px;font:700 16px var(--chu);cursor:pointer;text-decoration:none;background:var(--muc);color:#fff}
+.nut.phu{background:transparent;color:var(--muc);box-shadow:inset 0 0 0 2px var(--muc)}
+.nut.vang{background:var(--da-quang);color:var(--muc)}
+.nut:disabled{opacity:.45;cursor:not-allowed}
+section{padding:52px 0;border-top:1px solid var(--ke)}
+.cuon{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:var(--trang);font-size:15.5px}
+th,td{border:1px solid var(--ke);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--muc);color:#fff;font-weight:700}
+td.so,th.so{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hai{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.o{background:var(--trang);border:1px solid var(--ke);border-radius:14px;padding:20px}
+.nhan{display:inline-block;background:var(--da-quang);padding:1px 8px;border-radius:6px;font-weight:700;font-size:14px}
+.tinh label{display:block;font-weight:700;margin:12px 0 4px;font-size:15px}
+.tinh input[type=range]{width:100%}
+.tinh output{font-variant-numeric:tabular-nums;font-weight:800}
+.ket td{font-variant-numeric:tabular-nums}
+details{background:var(--trang);border:1px solid var(--ke);border-radius:12px;padding:14px 18px;margin:10px 0}
+summary{font-weight:700;cursor:pointer}
+details p{margin:10px 0 0}
+footer{background:var(--muc);color:#C9D3E3;padding:32px 0;font-size:15px}
+footer a{color:#fff}
+/* ---------- điện thoại */
+.may{width:min(372px,100%);margin:0 auto;background:var(--muc);border-radius:38px;padding:10px;box-shadow:0 10px 24px rgba(16,32,58,.14)}
+.man{background:var(--giay);border-radius:30px;height:690px;display:flex;flex-direction:column;overflow:hidden;font-size:15px;line-height:1.45}
+.vai{display:flex;gap:6px;padding:10px 12px 8px;background:var(--trang);border-bottom:1px solid var(--ke)}
+.vai button{flex:1;border:0;border-radius:9px;padding:8px;font:700 14px var(--chu);background:var(--giay);color:var(--chi);cursor:pointer}
+.vai button[aria-pressed=true]{background:var(--muc);color:#fff}
+.mau{background:var(--da-quang);font-size:13.5px;font-weight:700;padding:7px 12px;line-height:1.35;min-height:50px;display:flex;align-items:center}
+.than{flex:1;overflow-y:auto;padding:12px}
+.thanh{display:flex;background:var(--trang);border-top:1px solid var(--ke)}
+.thanh button{flex:1;border:0;background:none;padding:10px 4px 12px;font:500 12.5px var(--chu);color:var(--chi);cursor:pointer}
+.thanh button[aria-current=true]{color:var(--muc);font-weight:800;box-shadow:inset 0 3px 0 var(--da-quang)}
+.the{background:var(--trang);border:1px solid var(--ke);border-radius:14px;padding:12px;margin-bottom:10px}
+.the h4{margin:0 0 2px;font-size:15.5px}
+.the .nho{color:var(--chi);font-size:13.5px}
+.dong{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.tien{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:4px}
+.chip button{border:1px solid var(--ke);background:var(--trang);border-radius:99px;padding:5px 11px;font:500 13px var(--chu);white-space:nowrap;cursor:pointer;color:var(--muc)}
+.chip button[aria-pressed=true]{background:var(--muc);color:#fff;border-color:var(--muc)}
+.nb{width:100%;border:0;border-radius:10px;padding:11px;font:700 15px var(--chu);cursor:pointer;background:var(--muc);color:#fff;margin-top:8px}
+.nb.vang{background:var(--da-quang);color:var(--muc)}
+.nb.vien{background:none;color:var(--muc);box-shadow:inset 0 0 0 1.5px var(--ke)}
+.nb:disabled{opacity:.45;cursor:not-allowed}
+.buoc{list-style:none;margin:8px 0 0;padding:0}
+.buoc li{padding:5px 0 5px 26px;position:relative;color:var(--chi);font-size:14px}
+.buoc li::before{content:"";position:absolute;left:4px;top:10px;width:10px;height:10px;border-radius:50%;border:2px solid var(--ke);background:var(--trang)}
+.buoc li.xong{color:var(--muc)}
+.buoc li.xong::before{background:var(--dung-gio);border-color:var(--dung-gio)}
+.buoc li.dang{color:var(--muc);font-weight:700}
+.buoc li.dang::before{background:var(--da-quang);border-color:var(--muc)}
+.dau-moc{color:var(--dung-gio);font-weight:700;font-size:13.5px}
+.loi{color:var(--canh-bao);font-size:13.5px;font-weight:700;margin-top:4px}
+.o-nhap{width:100%;padding:9px 10px;border:1px solid var(--ke);border-radius:9px;font:500 15px var(--chu);background:var(--trang);color:var(--muc)}
+.than label{display:block;font-weight:700;font-size:13.5px;margin:10px 0 4px}
+.sao button{border:0;background:none;font-size:26px;cursor:pointer;color:var(--ke);padding:0 2px}
+.sao button.bat{color:#E0A800}
+.vach{height:8px;background:var(--ke);border-radius:99px;overflow:hidden;margin-top:6px}
+.vach i{display:block;height:100%;background:var(--dung-gio)}
+@media (max-width:860px){.mo{grid-template-columns:1fr}.hai{grid-template-columns:1fr}.man{height:640px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="bao"><div class="khung"><b>Đề án môn học.</b> On Time là doanh nghiệp giả định của Nhóm 7, môn Văn hóa doanh nghiệp Nhật Bản. Ứng dụng dưới đây là bản mô phỏng với dữ liệu mẫu: không có tài khoản, ca làm hay tiền thật.</div></div>
+<div class="khung">
+<header class="dau">
+  <a class="ten" href="index.html" aria-label="On Time, trang công ty"><i></i>On Time</a>
+  <nav class="muc" aria-label="Các trang"><a href="index.html">Công ty</a><a href="ung-dung.html" aria-current="page">Ứng dụng</a><a href="de-an.html">Đề án</a></nav>
+</header>
+
+<main>
+<div class="mo" id="dung-thu">
+  <div>
+    <h1>Có buổi trống? Nhận một ca gần trường.</h1>
+    <p class="dan">On Time là ứng dụng nhận ca làm lẻ 3 đến 5 tiếng ở quán và cửa hàng quanh trường. Bạn chọn ca khớp thời khóa biểu, làm xong ca nào nhận tiền ca đó.</p>
+    <ul class="ba-y">
+      <li><b>Không phỏng vấn.</b> Xem video một phút của loại việc rồi bấm nhận ca.</li>
+      <li><b>Quán nạp tiền trước.</b> Tiền công nằm sẵn ở bên trung gian thanh toán trước giờ vào ca.</li>
+      <li><b>Tiền về trong 24 giờ</b> sau khi bạn quét mã ra ca.</li>
+    </ul>
+    <p>Bấm thử ngay trên chiếc điện thoại mẫu. Dòng màu vàng trong máy chỉ bạn bước tiếp theo.</p>
+  </div>
+  <div class="may" id="may" aria-label="Bản mô phỏng ứng dụng On Time">
+    <div class="man">
+      <div class="vai" role="group" aria-label="Chọn vai">
+        <button type="button" id="vai-sv" data-vai="sv" aria-pressed="true">Sinh viên</button>
+        <button type="button" id="vai-quan" data-vai="quan" aria-pressed="false">Chủ quán</button>
+      </div>
+      <div class="mau" id="chi-dan" aria-live="polite"></div>
+      <div class="than" id="than"></div>
+      <div class="thanh" id="thanh"></div>
+    </div>
+  </div>
+</div>
+
+<section id="sau-buoc">
+  <h2>Một ca đi qua sáu bước</h2>
+  <p>Mỗi bước có một việc cho quán, một việc cho sinh viên và một việc On Time tự làm.</p>
+  <div class="cuon"><table>
+    <tr><th>Bước</th><th>Quán</th><th>Sinh viên</th><th>On Time</th></tr>
+    <tr><td>1. Đăng ca</td><td>Chọn loại việc, giờ làm, lương giờ; nạp trước tiền công và phí</td><td></td><td>Kiểm duyệt ca trước khi hiện</td></tr>
+    <tr><td>2. Nhận ca</td><td></td><td>Xem ca gần trường, bấm nhận</td><td>Ghi nhận thỏa thuận giữa quán và sinh viên</td></tr>
+    <tr><td>3. Chuẩn bị</td><td></td><td>Xem video một phút của loại việc</td><td>Nhắc giờ; gọi người dự bị nếu ca bị hủy</td></tr>
+    <tr><td>4. Vào ca</td><td>Chỉ việc 5 phút theo thẻ quán năm dòng</td><td>Quét mã vào ca</td><td>Ghi giờ bắt đầu</td></tr>
+    <tr><td>5. Hết ca</td><td>Xác nhận hoàn thành</td><td>Quét mã ra ca</td><td>Chuyển tiền công trong 24 giờ</td></tr>
+    <tr><td>6. Chấm điểm</td><td>Chấm sinh viên theo bốn tiêu chí</td><td>Chấm quán theo năm tiêu chí</td><td>Cập nhật điểm uy tín hai bên</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>Mỗi chức năng trả lời một nỗi lo có thật</h2>
+  <p>Số liệu lấy từ khảo sát sinh viên của nhóm, tháng 11/2026.</p>
+  <div class="cuon"><table>
+    <tr><th>Sinh viên nói</th><th class="so">Tỷ lệ</th><th>On Time làm gì</th></tr>
+    <tr><td>Xếp ca linh hoạt là điều quan trọng nhất khi chọn chỗ làm</td><td class="so">66,7%</td><td>Chỉ có ca lẻ, bạn tự chọn từng ca</td></tr>
+    <tr><td>Ngại vì không biết việc, không ai chỉ</td><td class="so">47,2%</td><td>Video một phút cho từng loại việc và thẻ quán năm dòng</td></tr>
+    <tr><td>Lo không an toàn</td><td class="so">44,4%</td><td>Chỉ có ca từ 6 giờ đến 22 giờ, không nhận quán bar và karaoke, có bảo hiểm tai nạn</td></tr>
+    <tr><td>Ngại quán xa</td><td class="so">41,7%</td><td>Chỉ hiện ca quanh trường, có ghi khoảng cách</td></tr>
+    <tr><td>Sợ không được trả tiền</td><td class="so">36,1%</td><td>Quán nạp tiền trước, tiền về trong 24 giờ</td></tr>
+  </table></div>
+</section>
+
+<section id="phi">
+  <h2>Quán trả bao nhiêu, sinh viên nhận bao nhiêu</h2>
+  <p>Sinh viên nhận đủ tiền công. Phí dịch vụ do quán trả: 20% khi ca có người mới, 15% khi quán mời lại người đã từng làm ở quán. Kéo thử để xem một ca chia thế nào.</p>
+  <div class="hai">
+    <div class="o tinh">
+      <label for="t-gio">Số giờ của ca: <output id="o-gio">4</output> giờ</label>
+      <input type="range" id="t-gio" min="3" max="5" step="1" value="4">
+      <label for="t-luong">Lương giờ: <output id="o-luong">32.000</output> đồng</label>
+      <input type="range" id="t-luong" min="27400" max="45000" step="200" value="32000">
+      <p style="font-size:14px;color:var(--chi);margin-top:10px">Mức thấp nhất trên thanh kéo là 27.400 đồng, lương tối thiểu giờ vùng I áp dụng từ 1/1/2027.</p>
+    </div>
+    <div class="cuon"><table class="ket">
+      <tr><th>Khoản</th><th class="so">Người mới (20%)</th><th class="so">Mời lại (15%)</th></tr>
+      <tr><td>Sinh viên nhận</td><td class="so" id="k-sv1"></td><td class="so" id="k-sv2"></td></tr>
+      <tr><td>Phí On Time</td><td class="so" id="k-p1"></td><td class="so" id="k-p2"></td></tr>
+      <tr><td><b>Quán trả</b></td><td class="so" id="k-q1"></td><td class="so" id="k-q2"></td></tr>
+    </table></div>
+  </div>
+</section>
+
+
+<section id="hoi-dap">
+  <h2>Hỏi đáp</h2>
+  <details open><summary>Đây có phải ứng dụng thật không?</summary><p>Chưa. On Time là doanh nghiệp giả định trong đề án giữa kỳ của Nhóm 7. Trang này là bản mô phỏng để người xem bấm thử cách ứng dụng sẽ chạy. Không có ca làm thật và trang không thu thông tin của bạn.</p></details>
+  <details><summary>Có những loại việc nào?</summary><p>Năm đầu chỉ nhận việc đơn giản: dọn bàn, rửa bát, bưng bê, xếp hàng và kiểm kho, phát tờ rơi. Chưa nhận pha chế, thu ngân, đứng bếp, giao hàng bằng xe máy; không nhận việc ở quán bar và karaoke. Mỗi sinh viên nhận tối đa 20 giờ một tuần.</p></details>
+  <details><summary>Quán hủy ca sát giờ thì sao?</summary><p>Nếu quán hủy trong vòng 12 giờ trước giờ làm, quán trả 50% tiền công của ca. Quy tắc này học từ quy định về việc làm theo ca lẻ mà Nhật Bản ban hành tháng 7/2025.</p></details>
+  <details><summary>Sinh viên nhận ca rồi không đến thì sao?</summary><p>Muốn hủy phải báo trước 12 giờ. Nhận ca mà không đến thì bị trừ điểm uy tín; ba lần thì tài khoản bị khóa 30 ngày. Ca trống sát giờ được báo cho danh sách người dự bị.</p></details>
+  <details><summary>Vì sao quán vẫn đặt qua ứng dụng sau ca đầu?</summary><p>Ca đi ngoài ứng dụng thì mất bốn thứ: bảo đảm nhận tiền trong 24 giờ, bảo hiểm tai nạn, người dự bị khi có người bỏ ca, và điểm uy tín. Mời lại người quen cũng chỉ tốn 15% phí.</p></details>
+</section>
+</main>
+</div>
+<footer><div class="khung">
+  <p><b>On Time</b> là doanh nghiệp giả định. Trang này thuộc đề án giữa kỳ môn Văn hóa doanh nghiệp Nhật Bản của Nhóm 7, tháng 11/2026. Mọi con số về phí và tiền công là giả định của nhóm, trừ mức lương tối thiểu.</p>
+  <p><a href="index.html">Công ty</a> &nbsp; <a href="de-an.html">Đề án</a></p>
+</div></footer>
+
+<script>
+(function(){
+"use strict";
+var d = function(n){ return n.toLocaleString("vi-VN") + "đ"; };
+var MIN = 27400;
+var VIEC = ["Dọn bàn","Rửa bát","Bưng bê","Xếp hàng, kiểm kho","Phát tờ rơi"];
+var CA = [
+ {id:1, quan:"Cà phê Sân Trường", pho:"Chùa Láng, Đống Đa", viec:"Dọn bàn", ngay:"Hôm nay", gio:"14:00 đến 18:00", h:4, luong:32000, xa:"400 m", diem:"4,8"},
+ {id:2, quan:"Trà sữa Giờ Ra Chơi", pho:"Xuân Thủy, Cầu Giấy", viec:"Bưng bê", ngay:"Hôm nay", gio:"18:00 đến 21:00", h:3, luong:33000, xa:"650 m", diem:"4,6"},
+ {id:3, quan:"Cơm Căng Tin Nhỏ", pho:"Nguyễn Chí Thanh, Đống Đa", viec:"Rửa bát", ngay:"Ngày mai", gio:"11:00 đến 14:00", h:3, luong:31000, xa:"300 m", diem:"4,7"},
+ {id:4, quan:"Tạp hóa Đầu Ngõ", pho:"Trần Quốc Hoàn, Cầu Giấy", viec:"Xếp hàng, kiểm kho", ngay:"Thứ Bảy", gio:"8:00 đến 13:00", h:5, luong:30000, xa:"900 m", diem:"4,9"},
+ {id:5, quan:"Bánh mì Chuông Reo", pho:"Láng Hạ, Đống Đa", viec:"Phát tờ rơi", ngay:"Chủ nhật", gio:"9:00 đến 12:00", h:3, luong:30000, xa:"1,1 km", diem:"4,5"}
+];
+var THE = ["Đồ dùng để ở kệ sau quầy","Có gì hỏi chị quản lý ca","Không tự vào khu bếp nóng","Lối thoát hiểm ở cửa sau","Nghỉ 10 phút giữa ca"];
+var MOC = ["Đã nhận ca","Quét mã vào ca","Đang làm","Quét mã ra ca","Quán xác nhận, tiền về ví","Chấm điểm quán"];
+var S = {vai:"sv", tab:"ca", loc:"Tất cả", xem:null, video:{}, ca:null, moc:0, vi:0, ls:[], gio:6, soCa:3, uy:98, sao:0,
+         q:{viec:VIEC[0], h:4, luong:32000, quen:false, loi:"", ds:[]}};
+var than = document.getElementById("than"), thanh = document.getElementById("thanh");
+function tong(c){ return c.h * c.luong; }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+function veThanh(){
+  var m = S.vai === "sv" ? [["ca","Ca gần bạn"],["toi","Ca của tôi"],["vi","Ví"],["ho","Hồ sơ"]] : [["dang","Đăng ca"],["ds","Ca đã đăng"]];
+  thanh.innerHTML = m.map(function(x){ return '<button type="button" data-tab="'+x[0]+'" aria-current="'+(S.tab===x[0])+'">'+x[1]+'</button>'; }).join("");
+}
+function theCa(c){
+  return '<div class="the"><div class="dong"><h4>'+esc(c.viec)+'</h4><span class="tien">'+d(tong(c))+'</span></div>'+
+    '<div class="nho">'+esc(c.quan)+', '+esc(c.pho)+'</div>'+
+    '<div class="nho">'+c.ngay+', '+c.gio+', cách trường '+c.xa+', quán '+c.diem+' sao</div>'+
+    '<button class="nb vien" type="button" data-act="xem" data-id="'+c.id+'">Xem ca này</button></div>';
+}
+function veCa(){
+  if (S.xem){ var c = S.xem, daXem = S.video[c.viec];
+    return '<button class="nb vien" type="button" data-act="lui" style="margin:0 0 10px">Quay lại danh sách</button>'+
+      '<div class="the"><div class="dong"><h4>'+esc(c.viec)+' tại '+esc(c.quan)+'</h4></div><div class="nho">'+esc(c.pho)+', '+c.ngay+', '+c.gio+'</div>'+
+      '<div class="dong" style="margin-top:8px"><span>'+c.h+' giờ × '+d(c.luong)+'</span><span class="tien">'+d(tong(c))+'</span></div>'+
+      '<div class="dau-moc">Quán đã nạp tiền công trước</div></div>'+
+      '<div class="the"><h4>Thẻ quán năm dòng</h4><ul class="buoc">'+THE.map(function(t){ return '<li class="xong">'+t+'</li>'; }).join("")+'</ul></div>'+
+      '<div class="the"><h4>Video một phút: '+esc(c.viec)+'</h4><div class="nho">'+(daXem ? "Bạn đã xem video của loại việc này." : "Phải xem trước ca đầu của mỗi loại việc.")+'</div>'+
+      (daXem ? "" : '<button class="nb vien" type="button" data-act="video">Xem video (mô phỏng)</button>')+'</div>'+
+      (S.ca ? '<div class="loi">Bạn đang có một ca. Làm xong ca đó rồi nhận ca mới.</div>' : "")+
+      (S.gio + c.h > 20 ? '<div class="loi">Nhận ca này sẽ vượt 20 giờ một tuần.</div>' : "")+
+      '<button class="nb vang" type="button" data-act="nhan" '+((!daXem || S.ca || S.gio + c.h > 20) ? "disabled" : "")+'>Nhận ca, không cần phỏng vấn</button>';
+  }
+  var loai = ["Tất cả"].concat(VIEC);
+  var ds = CA.filter(function(c){ return (S.loc === "Tất cả" || c.viec === S.loc) && !(S.ca && S.ca.id === c.id); });
+  return '<div class="chip">'+loai.map(function(l){ return '<button type="button" data-loc="'+esc(l)+'" aria-pressed="'+(S.loc===l)+'">'+esc(l)+'</button>'; }).join("")+'</div>'+
+    (ds.length ? ds.map(theCa).join("") : '<div class="the nho">Chưa có ca nào thuộc loại này quanh trường. Thử loại khác.</div>');
+}
+function veToi(){
+  if (!S.ca) return '<div class="the"><h4>Bạn chưa nhận ca nào</h4><div class="nho">Vào Ca gần bạn, chọn một ca khớp thời khóa biểu.</div><button class="nb" type="button" data-tab="ca">Xem ca gần bạn</button></div>';
+  var c = S.ca, nut = "";
+  if (S.moc === 0) nut = '<button class="nb vang" type="button" data-act="tien">Đến quán, quét mã vào ca</button><button class="nb vien" type="button" data-act="huy">Hủy ca</button><div class="nho" style="margin-top:6px">Hủy phải báo trước 12 giờ. Nhận ca mà không đến bị trừ điểm uy tín.</div>';
+  else if (S.moc === 1) nut = '<div class="nho">Người của quán chỉ việc 5 phút theo thẻ quán.</div><button class="nb" type="button" data-act="tien">Bắt đầu làm</button>';
+  else if (S.moc === 2) nut = '<button class="nb" type="button" data-act="tien">Tua tới hết ca</button><button class="nb vien" type="button" data-act="suco">Báo sự cố (3 dòng)</button>';
+  else if (S.moc === 3) nut = '<button class="nb vang" type="button" data-act="tien">Quét mã ra ca</button>';
+  else if (S.moc === 4) nut = '<div class="dau-moc">'+d(tong(c))+' đã về ví trong 24 giờ.</div><button class="nb" type="button" data-act="tien">Chấm điểm quán</button>';
+  else nut = '<div class="sao" role="group" aria-label="Chấm quán từ 1 đến 5 sao">'+[1,2,3,4,5].map(function(i){ return '<button type="button" data-sao="'+i+'" class="'+(i<=S.sao?"bat":"")+'" aria-label="'+i+' sao">★</button>'; }).join("")+'</div><button class="nb vang" type="button" data-act="xong" '+(S.sao?"":"disabled")+'>Gửi điểm và kết thúc ca</button>';
+  return '<div class="the"><div class="dong"><h4>'+esc(c.viec)+' tại '+esc(c.quan)+'</h4><span class="tien">'+d(tong(c))+'</span></div><div class="nho">'+c.ngay+', '+c.gio+'</div>'+
+    '<ul class="buoc">'+MOC.map(function(m,i){ return '<li class="'+(i<S.moc?"xong":i===S.moc?"dang":"")+'">'+m+'</li>'; }).join("")+'</ul></div>'+
+    (S.bao ? '<div class="the nho">'+S.bao+'</div>' : "")+nut;
+}
+function veVi(){
+  return '<div class="the"><div class="nho">Số dư</div><div class="tien" style="font-size:26px">'+d(S.vi)+'</div></div>'+
+    (S.ls.length ? S.ls.map(function(x){ return '<div class="the dong"><span>'+esc(x.t)+'</span><span class="tien">+'+d(x.n)+'</span></div>'; }).join("") : '<div class="the nho">Chưa có khoản nào. Làm xong ca đầu, tiền công sẽ hiện ở đây.</div>');
+}
+function veHo(){
+  return '<div class="the"><h4>Sinh viên mẫu</h4><div class="nho">Năm ba, đủ 18 tuổi</div></div>'+
+    '<div class="the"><div class="dong"><span>Điểm uy tín</span><span class="tien">'+S.uy+'/100</span></div><div class="dong"><span>Số ca đã làm</span><span class="tien">'+S.soCa+'</span></div></div>'+
+    '<div class="the"><div class="dong"><span>Giờ làm tuần này</span><span class="tien">'+S.gio+'/20 giờ</span></div><div class="vach"><i style="width:'+Math.min(100,S.gio*5)+'%"></i></div><div class="nho" style="margin-top:6px">Mỗi sinh viên tối đa 20 giờ một tuần.</div></div>';
+}
+function veDang(){
+  var q = S.q, tc = q.h*q.luong, ty = q.quen ? .15 : .2, phi = Math.round(tc*ty);
+  return '<div class="the"><h4>Đăng một ca</h4>'+
+    '<label for="q-viec">Loại việc</label><select class="o-nhap" id="q-viec">'+VIEC.map(function(v){ return '<option'+(v===q.viec?" selected":"")+'>'+v+'</option>'; }).join("")+'</select>'+
+    '<label for="q-h">Số giờ</label><select class="o-nhap" id="q-h">'+[3,4,5].map(function(h){ return '<option value="'+h+'"'+(h===q.h?" selected":"")+'>'+h+' giờ</option>'; }).join("")+'</select>'+
+    '<label for="q-luong">Lương giờ (đồng)</label><input class="o-nhap" id="q-luong" type="number" inputmode="numeric" min="'+MIN+'" step="500" value="'+q.luong+'">'+
+    (q.loi ? '<div class="loi">'+q.loi+'</div>' : "")+
+    '<label style="font-weight:500"><input type="checkbox" id="q-quen" '+(q.quen?"checked":"")+'> Mời lại người đã từng làm ở quán (phí 15%)</label></div>'+
+    '<div class="the"><div class="dong"><span>Tiền công cho sinh viên</span><span class="tien">'+d(tc)+'</span></div><div class="dong"><span>Phí On Time ('+(ty*100)+'%)</span><span class="tien">'+d(phi)+'</span></div><div class="dong"><b>Quán nạp trước</b><span class="tien">'+d(tc+phi)+'</span></div></div>'+
+    '<button class="nb vang" type="button" data-act="dang">Nạp tiền và đăng ca</button>';
+}
+var TT = ["Đang chờ người nhận","Đã có sinh viên nhận","Sinh viên đã quét mã ra ca","Đã xác nhận, tiền đã chuyển cho sinh viên"];
+var NUT = ["Mô phỏng: có sinh viên nhận","Mô phỏng: hết ca","Xác nhận hoàn thành"];
+function veDs(){
+  var ds = S.q.ds;
+  if (!ds.length) return '<div class="the"><h4>Quán chưa đăng ca nào</h4><div class="nho">Đăng ca khi thiếu người: giờ cao điểm, cuối tuần, lúc nhân viên nghỉ đột xuất.</div><button class="nb" type="button" data-tab="dang">Đăng ca đầu tiên</button></div>';
+  return ds.map(function(c,i){ return '<div class="the"><div class="dong"><h4>'+esc(c.viec)+', '+c.h+' giờ</h4><span class="tien">'+d(c.nap)+'</span></div><div class="nho">Phí '+c.ty+'%. '+(c.huy ? "Đã hủy sát giờ: trả 50% tiền công cho sinh viên" : TT[c.tt])+'</div>'+
+    (c.huy || c.tt>2 ? "" : '<button class="nb" type="button" data-act="qtien" data-i="'+i+'">'+NUT[c.tt]+'</button>')+
+    (!c.huy && c.tt===1 ? '<button class="nb vien" type="button" data-act="qhuy" data-i="'+i+'">Hủy ca trong 12 giờ trước giờ làm</button>' : "")+'</div>'; }).join("");
+}
+function chiDan(){
+  if (S.vai === "quan"){
+    if (S.tab === "dang") return "Vai chủ quán. Chọn việc, số giờ, lương giờ rồi bấm Nạp tiền và đăng ca.";
+    return S.q.ds.length ? "Bấm nút trong thẻ ca để đi tiếp: có người nhận, hết ca, xác nhận." : "Quán chưa có ca. Mở mục Đăng ca.";
+  }
+  if (S.ca){
+    if (S.tab !== "toi") return "Bạn đang có một ca. Mở mục Ca của tôi để làm tiếp.";
+    return ["Bước 3/6. Đến quán, bấm quét mã vào ca.","Bước 4/6. Nghe chỉ việc 5 phút, rồi bấm Bắt đầu làm.","Bước 4/6. Đang trong ca. Bấm Tua tới hết ca.","Bước 5/6. Hết ca. Bấm quét mã ra ca.","Bước 5/6. Tiền công đã về ví. Bấm Chấm điểm quán.","Bước 6/6. Chọn số sao rồi gửi điểm."][S.moc];
+  }
+  if (S.xem) return S.video[S.xem.viec] ? "Bước 2/6. Bấm Nhận ca." : "Bước 2/6. Xem video một phút, rồi bấm Nhận ca.";
+  if (S.ls.length) return "Xong một ca. Thử đổi sang vai Chủ quán ở phía trên.";
+  if (S.tab !== "ca") return "Mở mục Ca gần bạn để chọn một ca.";
+  return "Bước 1/6. Chọn một ca, bấm Xem ca này.";
+}
+function ve(){
+  document.getElementById("vai-sv").setAttribute("aria-pressed", S.vai==="sv");
+  document.getElementById("vai-quan").setAttribute("aria-pressed", S.vai==="quan");
+  veThanh();
+  var f = {ca:veCa, toi:veToi, vi:veVi, ho:veHo, dang:veDang, ds:veDs}[S.tab];
+  than.innerHTML = f();
+  document.getElementById("chi-dan").textContent = chiDan();
+}
+document.querySelector(".vai").addEventListener("click", function(e){ var b = e.target.closest("[data-vai]"); if(!b) return; S.vai = b.dataset.vai; S.tab = S.vai==="sv" ? "ca" : "dang"; S.xem = null; ve(); });
+document.querySelector(".man").addEventListener("click", function(e){
+  var t = e.target.closest("[data-tab]"); if (t){ S.tab = t.dataset.tab; S.xem = null; ve(); than.scrollTop = 0; return; }
+  var l = e.target.closest("[data-loc]"); if (l){ S.loc = l.dataset.loc; ve(); return; }
+  var s = e.target.closest("[data-sao]"); if (s){ S.sao = +s.dataset.sao; ve(); return; }
+  var b = e.target.closest("[data-act]"); if (!b) return; var a = b.dataset.act;
+  if (a==="xem"){ S.xem = CA.filter(function(c){ return c.id === +b.dataset.id; })[0]; than.scrollTop = 0; }
+  else if (a==="lui"){ S.xem = null; }
+  else if (a==="video"){ S.video[S.xem.viec] = true; }
+  else if (a==="nhan"){ S.ca = S.xem; S.moc = 0; S.sao = 0; S.bao = ""; S.xem = null; S.tab = "toi"; }
+  else if (a==="tien"){ S.moc++; S.bao = ""; if (S.moc===4){ var n = tong(S.ca); S.vi += n; S.ls.unshift({t:S.ca.viec+" tại "+S.ca.quan, n:n}); S.gio += S.ca.h; S.soCa++; } }
+  else if (a==="suco"){ S.bao = "<b>Mẫu báo sự cố ba dòng</b><br>Chuyện gì: ...<br>Đang ở đâu: ...<br>Cần gì: ...<br>Báo sớm thì không bị trừ điểm uy tín."; }
+  else if (a==="huy"){ S.ca = null; S.bao = ""; S.tab = "ca"; }
+  else if (a==="xong"){ S.ca = null; S.moc = 0; S.tab = "vi"; }
+  else if (a==="dang"){ var q = S.q; if (!(q.luong >= MIN)){ q.loi = "Lương giờ không được thấp hơn "+d(MIN)+", mức tối thiểu vùng I từ 1/1/2027."; }
+    else { q.loi = ""; var tc = q.h*q.luong, ty = q.quen?15:20; q.ds.unshift({viec:q.viec, h:q.h, ty:ty, nap:tc+Math.round(tc*ty/100), tt:0}); S.tab = "ds"; } }
+  else if (a==="qtien"){ S.q.ds[+b.dataset.i].tt++; }
+  else if (a==="qhuy"){ S.q.ds[+b.dataset.i].huy = true; }
+  ve();
+});
+document.querySelector(".man").addEventListener("change", function(e){ var q = S.q, id = e.target.id;
+  if (id==="q-viec") q.viec = e.target.value; else if (id==="q-h") q.h = +e.target.value;
+  else if (id==="q-luong"){ q.luong = +e.target.value; q.loi = ""; } else if (id==="q-quen") q.quen = e.target.checked; else return; ve(); });
+ve();
+// bảng tính phí
+var g = document.getElementById("t-gio"), lu = document.getElementById("t-luong");
+function tinh(){ var h = +g.value, w = +lu.value, tc = h*w; document.getElementById("o-gio").textContent = h; document.getElementById("o-luong").textContent = w.toLocaleString("vi-VN");
+  [["1",.2],["2",.15]].forEach(function(x){ var p = Math.round(tc*x[1]); document.getElementById("k-sv"+x[0]).textContent = d(tc); document.getElementById("k-p"+x[0]).textContent = d(p); document.getElementById("k-q"+x[0]).innerHTML = "<b>"+d(tc+p)+"</b>"; }); }
+g.addEventListener("input", tinh); lu.addEventListener("input", tinh); tinh();
+})();
+</script>
+</body>
+</html>

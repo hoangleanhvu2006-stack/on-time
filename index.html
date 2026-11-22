@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On Time</title>
+<meta name="description" content="On Time là doanh nghiệp giả định trong đề án môn Văn hóa doanh nghiệp Nhật Bản: ứng dụng nhận ca làm lẻ cho sinh viên Hà Nội, học từ mô hình việc làm ca lẻ của Nhật.">
+<meta property="og:title" content="On Time: trọn giờ lên lớp, khớp nhịp vào ca">
+<meta property="og:description" content="Doanh nghiệp giả định của Nhóm 7: ứng dụng nhận ca làm lẻ cho sinh viên, học từ mô hình việc làm ca lẻ của Nhật.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2310203A'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23FFE14D' stroke-width='2.5'/%3E%3Cpath d='M16 10v6l4 3' stroke='%23FFE14D' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Bố cục: căn trái; điểm nhấn duy nhất là tờ thời khóa biểu, khoảng trống được tô bút dạ quang và biến thành ca làm */
+  --giay:#F4F7FB; --trang:#FFFFFF; --muc:#10203A; --chi:#56677F; --ke:#D3DBE8;
+  --da-quang:#FFE14D; --dung-gio:#0B8A6A; --canh-bao:#C8371F;
+  --chu:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--giay);color:var(--muc);font-family:var(--chu);font-size:17px;line-height:1.6}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--dung-gio);outline-offset:2px;border-radius:4px}
+.khung{max-width:1080px;margin:0 auto;padding:0 20px}
+.bao{background:var(--muc);color:#fff;font-size:14px;padding:8px 0}
+.bao b{color:var(--da-quang)}
+header.dau{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:18px 0}
+.ten{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;text-decoration:none}
+.ten i{width:30px;height:30px;border-radius:8px;background:var(--muc);display:grid;place-items:center}
+.ten i::before{content:"";width:16px;height:16px;border:2.5px solid var(--da-quang);border-radius:50%;background:linear-gradient(var(--da-quang),var(--da-quang)) 50% 30%/2.5px 6px no-repeat}
+nav.muc{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:16px}
+nav.muc a{text-decoration:none;color:var(--chi)}
+nav.muc a:hover{color:var(--muc);text-decoration:underline}
+nav.muc a[aria-current]{color:var(--muc);font-weight:700;box-shadow:inset 0 -3px 0 var(--da-quang)}
+h1{font-size:clamp(34px,5vw,52px);line-height:1.05;font-weight:800;margin:8px 0 18px;text-wrap:balance;letter-spacing:-.015em}
+h1 span{display:block}
+h2{font-size:clamp(24px,3vw,32px);line-height:1.2;font-weight:800;margin:0 0 14px;text-wrap:balance}
+h3{font-size:18px;margin:0 0 6px}
+p{margin:0 0 14px;max-width:62ch}
+.dan{font-size:19px;color:var(--chi)}
+.nut{display:inline-block;border:0;border-radius:10px;padding:13px 20px;font:700 16px var(--chu);cursor:pointer;text-decoration:none;background:var(--muc);color:#fff;margin:0 8px 8px 0}
+.nut.phu{background:transparent;color:var(--muc);box-shadow:inset 0 0 0 2px var(--muc)}
+.mo>*,.hai>*{min-width:0}
+.mo{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;padding:24px 0 56px}
+section{padding:52px 0;border-top:1px solid var(--ke)}
+.cuon{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:var(--trang);font-size:15.5px}
+th,td{border:1px solid var(--ke);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--muc);color:#fff;font-weight:700}
+td.so,th.so{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hai{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.o{background:var(--trang);border:1px solid var(--ke);border-radius:14px;padding:20px}
+.o p:last-child{margin-bottom:0}
+.nhat{font-weight:500;color:var(--chi);font-size:15px;margin-left:6px}
+.trich{font-size:clamp(20px,2.4vw,26px);line-height:1.4;font-weight:700;max-width:30ch;margin:0 0 18px;background:linear-gradient(transparent 62%,var(--da-quang) 62%);display:inline}
+/* ---------- thời khóa biểu */
+.tkb{background:var(--trang);border:1px solid var(--ke);border-radius:16px;padding:16px}
+.tkb h2{font-size:18px;margin:0 0 2px}
+.tkb .nho{font-size:14px;color:var(--chi);margin:0 0 12px;max-width:none}
+.luoi{display:grid;grid-template-columns:44px repeat(4,1fr);gap:5px;font-size:12.5px}
+.luoi .dau-cot{font-weight:700;color:var(--chi);text-align:center;padding:2px 0;line-height:1.25}
+.luoi .thu{font-weight:700;display:grid;place-items:center;color:var(--chi)}
+.luoi .tiet{background:var(--muc);color:#C9D3E3;border-radius:8px;min-height:44px;display:grid;place-items:center;text-align:center;padding:2px}
+.luoi button{border:1.5px dashed var(--muc);background:var(--da-quang);color:var(--muc);border-radius:8px;min-height:44px;font:700 12.5px var(--chu);cursor:pointer;padding:2px;font-variant-numeric:tabular-nums}
+.luoi button[aria-pressed=true]{background:var(--dung-gio);color:#fff;border:1.5px solid var(--dung-gio)}
+.chu-thich{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--chi);margin:12px 0 0}
+.chu-thich i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.tong{margin-top:12px;border-top:1px solid var(--ke);padding-top:12px;font-size:15px}
+.tong b{font-variant-numeric:tabular-nums}
+.tong .loi{color:var(--canh-bao);font-weight:700;font-size:14px}
+.vach{height:8px;background:var(--ke);border-radius:99px;overflow:hidden;margin:8px 0}
+.vach i{display:block;height:100%;background:var(--dung-gio)}
+/* ---------- khảo sát */
+.ks{display:grid;gap:14px;margin-top:8px}
+.ks div{display:grid;grid-template-columns:76px 1fr;gap:4px 14px;align-items:center}
+.ks b{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.ks span{grid-column:2}
+.ks .vach{grid-column:1/-1;margin:0}
+.ks .vach i{background:var(--muc)}
+ol.qt{padding-left:22px;margin:0}
+ol.qt li{margin-bottom:8px;max-width:62ch}
+footer{background:var(--muc);color:#C9D3E3;padding:32px 0;font-size:15px}
+footer a{color:#fff}
+@media (max-width:860px){.mo{grid-template-columns:1fr}.hai{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="bao"><div class="khung"><b>Đề án môn học.</b> On Time là doanh nghiệp giả định của Nhóm 7, môn Văn hóa doanh nghiệp Nhật Bản. Công ty chưa thành lập, chưa có dịch vụ thật.</div></div>
+<div class="khung">
+<header class="dau">
+  <a class="ten" href="index.html" aria-label="On Time, trang công ty"><i></i>On Time</a>
+  <nav class="muc" aria-label="Các trang"><a href="index.html" aria-current="page">Công ty</a><a href="ung-dung.html">Ứng dụng</a><a href="de-an.html">Đề án</a></nav>
+</header>
+
+<main>
+<div class="mo">
+  <div>
+    <h1><span>Trọn giờ lên lớp,</span><span>khớp nhịp vào ca.</span></h1>
+    <p class="dan">On Time là ứng dụng nhận ca làm lẻ 3 đến 5 tiếng cho sinh viên Hà Nội. Sinh viên chọn ca theo thời khóa biểu. Quán có người đúng lúc thiếu.</p>
+    <p>Mô hình này ở Nhật gọi là スキマバイト, việc làm thêm lấp chỗ trống. Nhóm học cách làm của Nhật rồi chỉnh lại cho quán và sinh viên ở Đống Đa, Cầu Giấy.</p>
+    <p><a class="nut" href="ung-dung.html">Bấm thử ứng dụng mô phỏng</a><a class="nut phu" href="de-an.html">Đọc đề án</a></p>
+  </div>
+  <div class="tkb" aria-label="Thời khóa biểu mẫu">
+    <h2>Thời khóa biểu của một sinh viên năm ba</h2>
+    <p class="nho">Ô vàng là buổi trống, đang có ca gần trường. Bấm vào ô để nhận ca.</p>
+    <div class="luoi" id="luoi"></div>
+    <p class="chu-thich"><span><i style="background:var(--muc)"></i>Có tiết</span><span><i style="background:var(--da-quang);border:1px dashed var(--muc)"></i>Trống, có ca</span><span><i style="background:var(--dung-gio)"></i>Đã nhận ca</span></p>
+    <div class="tong" id="tong" aria-live="polite"></div>
+  </div>
+</div>
+
+<section id="vi-sao">
+  <h2>Sinh viên muốn đi làm, nhưng việc làm thêm đang có nhiều chuyện không hay</h2>
+  <p>Nhóm khảo sát sinh viên Hà Nội trong tháng 11/2026. Bốn con số dưới đây là lý do có On Time.</p>
+  <div class="hai">
+    <div class="ks">
+      <div><b>64,5%</b><span>sinh viên từng đi làm thêm đã gặp ít nhất một chuyện không hay: bị gọi đi làm gấp, bị trừ lương, làm quá giờ không lương, chậm lương.</span><p class="vach"><i style="width:64.5%"></i></p></div>
+      <div><b>38,7%</b><span>vào việc mà không ai dạy, hoặc chỉ được dặn vài câu.</span><p class="vach"><i style="width:38.7%"></i></p></div>
+    </div>
+    <div class="ks">
+      <div><b>66,7%</b><span>coi xếp ca linh hoạt là điều quan trọng nhất khi chọn chỗ làm, cao hơn cả lương giờ (61,1%).</span><p class="vach"><i style="width:66.7%"></i></p></div>
+      <div><b>83,3%</b><span>nói sẽ dùng một ứng dụng nhận ca lẻ: 25,0% dùng ngay, 58,3% muốn thử trước.</span><p class="vach"><i style="width:83.3%"></i></p></div>
+    </div>
+  </div>
+  <p style="margin-top:18px;font-size:15px;color:var(--chi)">Nguồn: khảo sát trực tuyến của Nhóm 7, tháng 11/2026. Mẫu nhỏ, chủ yếu là sinh viên năm ba, nên chỉ dùng để định hướng.</p>
+</section>
+
+<section id="triet-ly">
+  <h2>Triết lý kinh doanh</h2>
+  <p><span class="trich">Biến những khoảng trống thời gian thành hành trang trưởng thành cho sinh viên và điểm tựa kịp thời cho hàng quán.</span></p>
+  <div class="hai" style="margin-top:22px">
+    <div class="o"><h3>Sứ mệnh</h3><p>Nối giờ rảnh của sinh viên với giờ thiếu người của quán, theo những quy tắc rõ ràng và tử tế với cả hai phía.</p></div>
+    <div class="o"><h3>Tầm nhìn đến 2029</h3><p>Là nơi sinh viên Hà Nội nghĩ tới đầu tiên khi có một buổi trống muốn đi làm, với khoảng 400.000 ca mỗi năm (giả định trong kế hoạch tài chính).</p></div>
+  </div>
+  <h2 style="margin-top:36px">Bốn giá trị</h2>
+  <div class="hai">
+    <div class="o"><h3>Đúng giờ, đúng hẹn<span class="nhat" lang="ja">時間厳守</span></h3><p>Đúng giờ vào ca, đúng hạn trả tiền, đúng lời đã hứa trên ứng dụng.</p></div>
+    <div class="o"><h3>Coi trọng hiện trường<span class="nhat" lang="ja">現場主義</span></h3><p>Mỗi tháng từng sáng lập viên tự nhận một ca qua ứng dụng để biết việc thật ra sao.</p></div>
+    <div class="o"><h3>Công bằng hai phía</h3><p>Quán và sinh viên chấm điểm nhau, điểm của cả hai đều công khai, tranh chấp được xử như nhau.</p></div>
+    <div class="o"><h3>Cải tiến mỗi tuần<span class="nhat" lang="ja">改善</span></h3><p>Sau mỗi ca hỏi một câu về điều nên sửa. Mỗi tuần sửa một việc lấy từ câu trả lời.</p></div>
+  </div>
+  <p style="margin-top:18px">Tên On Time nghĩa là đúng giờ, đúng lúc: sinh viên đến ca đúng giờ, quán trả tiền công đúng hạn, On Time đưa người đến đúng lúc quán cần.</p>
+</section>
+
+<section id="hoc-nhat">
+  <h2>Học gì từ Nhật, chỉnh gì cho Việt Nam</h2>
+  <div class="cuon"><table>
+    <tr><th>Ở Nhật</th><th>Cách làm</th><th>On Time chỉnh lại</th></tr>
+    <tr><td><span lang="ja">スキマバイト</span> (Timee)</td><td>Nhận ca không phỏng vấn, trả tiền nhanh, phí khoảng 30%</td><td>Phí 20% với người mới, 15% khi mời lại người quen; chỉ ca quanh trường, chỉ dành cho sinh viên, năm đầu chỉ nhận việc đơn giản</td></tr>
+    <tr><td>Quy định hủy ca năm 2025</td><td>Chủ hủy ca phải trả trợ cấp ngừng việc</td><td>Quy tắc từ ngày đầu: hủy trong 12 giờ trước giờ làm thì trả 50% tiền công</td></tr>
+    <tr><td>Sổ tay công việc của MUJI</td><td>Bộ sổ khoảng 2.000 trang, nhân viên cửa hàng góp ý sửa</td><td>Thẻ quán năm dòng và video một phút cho từng loại việc; quán và sinh viên cùng đề nghị sửa</td></tr>
+    <tr><td>The Five Keys (Tokyo Disney Resort)</td><td>Năm nguyên tắc có thứ tự ưu tiên cho người làm theo ca</td><td>Bốn nguyên tắc cho người nhận ca: An toàn, Đúng giờ, Lễ phép, Làm gọn</td></tr>
+    <tr><td><span lang="ja">報連相</span> (báo cáo, liên lạc, hỏi ý)</td><td>Thói quen báo việc trong công ty</td><td>Mẫu tin nhắn ba dòng khi có sự cố trong ca: chuyện gì, đang ở đâu, cần gì</td></tr>
+    <tr><td><span lang="ja">改善</span> (cải tiến)</td><td>Người làm trực tiếp đề xuất sửa quy trình</td><td>Sau mỗi ca hỏi một câu "Ca này nên sửa gì?"; mỗi tuần sửa một việc</td></tr>
+  </table></div>
+</section>
+
+<section id="quy-tac">
+  <h2>Bộ quy tắc quán tử tế</h2>
+  <p>Quán nào đăng ca trên On Time cũng nhận bộ quy tắc này. Sinh viên thấy nó trên từng ca.</p>
+  <div class="hai">
+    <div class="o"><h3>Với quán</h3>
+      <ol class="qt">
+        <li>Lương giờ không thấp hơn mức tối thiểu vùng, và nạp tiền công trước giờ vào ca.</li>
+        <li>Chỉ đăng ca từ 6 giờ đến 22 giờ. Quán bar và karaoke không được đăng.</li>
+        <li>Chỉ việc 5 phút đầu ca theo thẻ quán năm dòng: đồ để đâu, hỏi ai, việc không được làm, lối thoát hiểm, giờ nghỉ.</li>
+        <li>Hủy ca trong 12 giờ trước giờ làm thì trả 50% tiền công.</li>
+        <li>Xác nhận hết ca để tiền về với sinh viên trong 24 giờ.</li>
+      </ol></div>
+    <div class="o"><h3>Với sinh viên</h3>
+      <ol class="qt">
+        <li>Đủ 18 tuổi. Nhận tối đa 20 giờ một tuần.</li>
+        <li>Xem video một phút của loại việc trước ca đầu.</li>
+        <li>Quét mã khi vào ca và khi ra ca.</li>
+        <li>Muốn hủy phải báo trước 12 giờ. Bỏ ca ba lần thì bị khóa 30 ngày.</li>
+        <li>Có sự cố thì nhắn ngay theo mẫu ba dòng.</li>
+      </ol></div>
+  </div>
+  <p style="margin-top:18px">Sau mỗi ca, sinh viên chấm quán theo năm tiêu chí (tiền công, môi trường, thái độ quản lý, đúng mô tả, minh bạch giờ giấc). Quán chấm sinh viên theo bốn tiêu chí (đúng giờ, thái độ, hoàn thành việc, trách nhiệm).</p>
+</section>
+
+<section id="doi-ngu">
+  <h2>Đội ngũ</h2>
+  <p>Nhóm sáng lập là bốn sinh viên của Nhóm 7. Năm đầu tuyển thêm một nhân viên hỗ trợ người dùng.</p>
+  <div class="cuon"><table>
+    <tr><th>Vị trí</th><th>Phụ trách</th></tr>
+    <tr><td>Giám đốc điều hành</td><td>Chiến lược, sản phẩm, gọi vốn</td></tr>
+    <tr><td>Giám đốc Nghiên cứu thị trường</td><td>Khảo sát sinh viên và quán, theo dõi mô hình ở Nhật</td></tr>
+    <tr><td>Giám đốc Vận hành và Tài chính</td><td>Quy trình ca làm, thanh toán, kế hoạch tài chính</td></tr>
+    <tr><td>Giám đốc Nhân sự và Văn hóa</td><td>Bộ quy tắc, đào tạo qua video, chấm điểm hai chiều</td></tr>
+  </table></div>
+</section>
+
+<section id="de-an">
+  <h2>Muốn xem kỹ hơn?</h2>
+  <p>Toàn bộ lập luận, số liệu khảo sát, kế hoạch tài chính ba năm và tài liệu tham khảo nằm trong đề án của nhóm.</p>
+  <p><a class="nut" href="de-an.html">Đọc đề án</a><a class="nut phu" href="ung-dung.html">Bấm thử ứng dụng</a></p>
+</section>
+</main>
+</div>
+<footer><div class="khung">
+  <p><b>On Time</b> là doanh nghiệp giả định. Trang này thuộc đề án giữa kỳ môn Văn hóa doanh nghiệp Nhật Bản của Nhóm 7, tháng 11/2026. Số liệu khảo sát là của nhóm; số liệu tài chính là giả định.</p>
+  <p><a href="ung-dung.html">Ứng dụng</a> &nbsp; <a href="de-an.html">Đề án</a></p>
+</div></footer>
+
+<script>
+(function(){
+"use strict";
+var THU = ["T2","T3","T4","T5","T6","T7"];
+var BUOI = [["Sáng","7 đến 11",4],["Trưa","11 đến 14",3],["Chiều","14 đến 18",4],["Tối","18 đến 21",3]];
+// 1 = có tiết, 0 = trống
+var LICH = [[1,0,1,0],[1,0,0,1],[0,0,1,0],[1,1,0,0],[1,0,1,0],[0,0,0,1]];
+var VIEC = [["Dọn bàn","Cà phê Sân Trường",32000],["Rửa bát","Cơm Căng Tin Nhỏ",31000],["Bưng bê","Trà sữa Giờ Ra Chơi",33000],["Xếp hàng, kiểm kho","Tạp hóa Đầu Ngõ",30000],["Phát tờ rơi","Bánh mì Chuông Reo",30000]];
+var chon = {}, moi = null, loi = "";
+var luoi = document.getElementById("luoi"), tong = document.getElementById("tong");
+var d = function(n){ return n.toLocaleString("vi-VN") + "đ"; };
+function ca(t,b){ var v = VIEC[(t*2+b) % VIEC.length]; return {viec:v[0], quan:v[1], h:BUOI[b][2], tien:BUOI[b][2]*v[2], khi:THU[t].replace("T","Thứ ")+", "+BUOI[b][1]+" giờ"}; }
+function gio(){ var g = 0; for (var k in chon){ var p = k.split("-"); g += BUOI[+p[1]][2]; } return g; }
+function ve(){
+  var h = '<span></span>' + BUOI.map(function(b){ return '<span class="dau-cot">'+b[0]+'<br>'+b[1]+'</span>'; }).join("");
+  LICH.forEach(function(hang,t){
+    h += '<span class="thu">'+THU[t]+'</span>';
+    hang.forEach(function(co,b){
+      if (co) h += '<span class="tiet">Có tiết</span>';
+      else { var c = ca(t,b), k = t+"-"+b; h += '<button type="button" data-k="'+k+'" aria-pressed="'+(!!chon[k])+'" aria-label="'+c.khi+', '+c.viec+', '+d(c.tien)+'">'+(chon[k] ? "Đã nhận" : (c.tien/1000)+"k")+'</button>'; }
+    });
+  });
+  luoi.innerHTML = h;
+  var g = gio(), tien = 0, n = 0; for (var k in chon){ var p = k.split("-"); tien += ca(+p[0],+p[1]).tien; n++; }
+  var c = moi ? ca(+moi.split("-")[0], +moi.split("-")[1]) : null;
+  tong.innerHTML = (c ? '<div><b>'+c.viec+'</b> tại '+c.quan+', '+c.khi+': '+d(c.tien)+'</div>' : '<div>Chưa nhận ca nào. Thử bấm một ô vàng.</div>')+
+    '<div class="vach"><i style="width:'+(g*5)+'%"></i></div>'+
+    '<div>Tuần này: <b>'+n+' ca</b>, <b>'+g+'/20 giờ</b>, tiền công <b>'+d(tien)+'</b></div>'+
+    (loi ? '<div class="loi">'+loi+'</div>' : "");
+}
+luoi.addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return; var k = b.dataset.k, p = k.split("-"); loi = "";
+  if (chon[k]) { delete chon[k]; moi = null; }
+  else if (gio() + BUOI[+p[1]][2] > 20) { loi = "Ca này làm tuần vượt 20 giờ. On Time giới hạn 20 giờ một tuần để việc làm thêm không lấn giờ học."; moi = k; }
+  else { chon[k] = true; moi = k; }
+  ve();
+  var lai = luoi.querySelector('[data-k="'+k+'"]'); if (lai) lai.focus();
+});
+ve();
+})();
+</script>
+</body>
+</html>
